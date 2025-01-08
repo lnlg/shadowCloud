@@ -3,6 +3,8 @@ package cmd
 import (
 	"fmt"
 
+	_ "shadowCloud/internal/bootstrap"
+
 	"github.com/spf13/cobra"
 )
 

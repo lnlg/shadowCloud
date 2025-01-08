@@ -15,6 +15,9 @@ go mod tidy
 go get -u github.com/spf13/cobra@latest
 安装gin框架
 go get -u github.com/gin-gonic/gin
+
+安装viper库
+go get -u github.com/spf13/viper
 ```
 
 ## 目录结构

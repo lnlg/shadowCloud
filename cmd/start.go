@@ -1,14 +1,16 @@
 package cmd
 
 import (
-	"github.com/gin-gonic/gin"
+	"shadowCloud/app/route"
+	"shadowCloud/internal/service"
+
 	"github.com/spf13/cobra"
 )
 
 var startCmd = &cobra.Command{
 	Use:   "start",
-	Short: "Start the ShadowCloud server",
-	Long:  `Start the ShadowCloud server`,
+	Short: "Start  server",
+	Long:  `项目启动服务器命令`,
 	Run: func(cmd *cobra.Command, args []string) {
 		runServer()
 	},
@@ -19,14 +21,7 @@ func init() {
 }
 
 func runServer() {
-	r := gin.New()
-
-	r.GET("/ping", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"code":    200,
-			"message": "pong",
-			"data":    nil,
-		})
-	})
-	r.Run(":8082")
+	http := service.New()
+	http.RegisterRoutes(route.New())
+	http.Run()
 }

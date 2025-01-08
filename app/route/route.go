@@ -9,13 +9,9 @@ func (a *AppRouter) AddRoutes(server *gin.Engine) {
 	panic("unimplemented")
 }
 
-func (*AppRouter) AddRoute(r *gin.Engine) {
-	r.GET("/", func(c *gin.Context) {
-		c.String(200, "Hello, World!")
-	})
-	r.GET("/ping", func(c *gin.Context) {
-		c.String(200, "pong")
-	})
+func (*AppRouter) AddRoute(e *gin.Engine) {
+	RegisterAdminRouter(e.Group("/admin"))
+	RegisterAppRouter(e.Group("/app"))
 }
 
 func New() *AppRouter {

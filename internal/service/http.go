@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
+	"shadowCloud/internal/global"
 	"shadowCloud/internal/service/route"
 	"syscall"
 	"time"
@@ -23,7 +24,7 @@ type Http struct {
 func New() *Http {
 	return &Http{
 		engine: gin.New(),
-		port:   ":8082",
+		port:   ":" + global.Config.App.Port,
 	}
 }
 

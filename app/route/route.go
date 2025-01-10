@@ -1,6 +1,10 @@
 package route
 
-import "github.com/gin-gonic/gin"
+import (
+	"shadowCloud/app/middleware"
+
+	"github.com/gin-gonic/gin"
+)
 
 type AppRouter struct{}
 
@@ -10,6 +14,8 @@ func (a *AppRouter) AddRoutes(server *gin.Engine) {
 }
 
 func (*AppRouter) AddRoute(e *gin.Engine) {
+	//记录访问日志中间件
+	e.Use(middleware.HttpLogger())
 	RegisterAdminRouter(e.Group("/admin"))
 	RegisterAppRouter(e.Group("/app"))
 }

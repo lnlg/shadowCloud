@@ -7,4 +7,5 @@ type App struct {
 	Mode    string `mapstructure:"mode" json:"mode" yaml:"mode"`
 	Host    string `mapstructure:"host" json:"host" yaml:"host"`
 	Port    string `mapstructure:"port" json:"port" yaml:"port"`
+	Env     string `mapstructure:"env" json:"env" yaml:"env"`
 }

@@ -11,6 +11,7 @@ import (
 // 用于存放所有配置对应的结构体
 type Config struct {
 	App      App
+	Logger   Logger
 	Database Database
 	Redis    Redis
 }

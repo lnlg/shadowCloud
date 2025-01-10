@@ -4,6 +4,7 @@ import (
 	"shadowCloud/internal/config"
 	"shadowCloud/internal/global"
 	"shadowCloud/internal/logger"
+	"shadowCloud/internal/mysql"
 )
 
 func init() {
@@ -13,7 +14,7 @@ func init() {
 	// 初始化日志
 	if global.Logger, err = logger.New(); err != nil {
 		panic(err)
-		return
 	}
-
+	// 初始化数据库
+	global.Db = mysql.New()
 }

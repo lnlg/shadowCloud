@@ -8,4 +8,5 @@ type App struct {
 	Host    string `mapstructure:"host" json:"host" yaml:"host"`
 	Port    string `mapstructure:"port" json:"port" yaml:"port"`
 	Env     string `mapstructure:"env" json:"env" yaml:"env"`
+	Debug   bool   `mapstructure:"debug" json:"debug" yaml:"debug"`
 }

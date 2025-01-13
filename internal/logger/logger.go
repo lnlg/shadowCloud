@@ -18,6 +18,7 @@ var (
 	conf    config.Logger
 )
 
+// 初始化日志
 func New() (logger *zap.Logger, err error) {
 	// 获取配置文件
 	conf = global.Config.Logger
@@ -36,7 +37,7 @@ func New() (logger *zap.Logger, err error) {
 	loggerConf.EncoderConfig = genEncodeConfig()
 
 	// 设置日志写入器
-	writer, err := genWriteSyncer()
+	writer, err := genWriteSyncer("")
 	if err != nil {
 		return nil, err
 	}
@@ -54,11 +55,11 @@ func New() (logger *zap.Logger, err error) {
 	// 创建日志
 	logger = zap.New(core, options...)
 
-	return
+	return logger, nil
 }
 
 // 生成WriteSyncer 日志写入器
-func genWriteSyncer() (writeSyncer zapcore.WriteSyncer, err error) {
+func genWriteSyncer(name string) (writeSyncer zapcore.WriteSyncer, err error) {
 	// 创建日志存放目录
 	rootDir := tool.GetRootDir()
 	logDir := rootDir + conf.FilePath
@@ -66,10 +67,15 @@ func genWriteSyncer() (writeSyncer zapcore.WriteSyncer, err error) {
 	if err != nil {
 		return
 	}
-
+	filename := ""
+	if name == "" {
+		filename = logDir + conf.FileName
+	} else {
+		filename = logDir + name + ".log"
+	}
 	// 创建日志写入器
 	lumberJack := &lumberjack.Logger{
-		Filename:   logDir + conf.FileName,
+		Filename:   filename,
 		MaxSize:    conf.MaxSize, // megabytes
 		MaxBackups: conf.MaxBackups,
 		MaxAge:     conf.MaxAge, //days
@@ -138,4 +144,43 @@ func getLevel() (level zapcore.Level) {
 	}
 
 	return
+}
+
+func NewMysqlLogger() (logger *zap.Logger) {
+	// 获取配置文件
+	conf = global.Config.Logger
+
+	// 创建日志存放目录
+	rootDir := tool.GetRootDir()
+	logDir := rootDir + conf.FilePath
+	err := os.MkdirAll(logDir, os.ModePerm)
+	if err != nil {
+		return nil
+	}
+
+	loggerConf := genConfig()
+
+	// 设置时间格式
+	loggerConf.EncoderConfig = genEncodeConfig()
+
+	// 设置日志写入器
+	writer, err := genWriteSyncer("mysql")
+	if err != nil {
+		return nil
+	}
+
+	// 创建日志核心
+	core := zapcore.NewCore(
+		zapcore.NewJSONEncoder(loggerConf.EncoderConfig),
+		writer,
+		loggerConf.Level,
+	)
+
+	// 添加调用位置
+	options = append(options, zap.AddCaller())
+
+	// 创建日志
+	logger = zap.New(core, options...)
+
+	return logger
 }

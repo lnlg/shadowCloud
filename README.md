@@ -2,6 +2,12 @@
 
 go项目使用gin封装一个简洁的项目框架
 
+## 启动项目
+
+```go
+go run main.go start
+```
+
 ## 安装插件
 
 ```go
@@ -11,6 +17,8 @@ go mod init serviceCloud
 引用项目需要的依赖增加到go.mod文件,去掉go.mod文件中项目不需要的依赖。
 go mod tidy
 
+go clean -modcache
+
 安装cobra命令行工具
 go get -u github.com/spf13/cobra@latest
 安装gin框架
@@ -18,6 +26,11 @@ go get -u github.com/gin-gonic/gin
 
 安装viper库
 go get -u github.com/spf13/viper
+
+安装fresh项目热加载库
+go install github.com/pilu/fresh@latest
+启动应用： 在项目根目录下运行 fresh 命令代替直接执行 go run main.go 或 go build && ./myapp：
+/Users/longlian/go/code/bin/fresh
 ```
 
 ## 目录结构

@@ -24,7 +24,13 @@ func New() (db *gorm.DB) {
 	if err != nil {
 		panic("failed to connect database")
 	}
-	// 设置连接池
+
+	if global.Config.App.Debug {
+		//开启mysql日志记录文本中
+		// db.Logger = logger.NewMysqlLogger()
+
+	}
+	// 设置连接池大小
 	sqlDB, err := db.DB()
 	if err != nil {
 		panic("failed to get database")

@@ -8,6 +8,7 @@ import (
 	"go.uber.org/zap"
 )
 
+// http请求日志中间件
 func HttpLogger() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		start := time.Now()

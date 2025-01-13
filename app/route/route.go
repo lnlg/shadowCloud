@@ -15,6 +15,8 @@ func (a *AppRouter) AddRoutes(server *gin.Engine) {
 }
 
 func (*AppRouter) AddRoute(e *gin.Engine) {
+	// 全局http请求异常处理中间件
+	e.Use(middleware.HttpExceptionRecover())
 	if global.Config.App.Debug {
 		// 记录访问日志全局中间件
 		e.Use(middleware.HttpLogger())

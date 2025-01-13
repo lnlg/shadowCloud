@@ -13,5 +13,7 @@ func RegisterAppRouter(r *gin.RouterGroup) {
 	test := r.Group("/test")
 	{
 		test.GET("/user", app.AppApi.GetUserInfo)
+		test.GET("/redis", app.AppApi.RedisTest)
 	}
+
 }

@@ -5,6 +5,7 @@ import (
 	"shadowCloud/internal/global"
 	"shadowCloud/internal/logger"
 	"shadowCloud/internal/mysql"
+	"shadowCloud/internal/redis"
 )
 
 func init() {
@@ -17,4 +18,6 @@ func init() {
 	}
 	// 初始化数据库
 	global.Db = mysql.New()
+	// 初始化redis
+	global.Rdb = redis.New()
 }

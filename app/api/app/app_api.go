@@ -3,6 +3,7 @@ package app
 import (
 	"shadowCloud/app/models"
 	"shadowCloud/app/response"
+	"shadowCloud/internal/global"
 
 	"github.com/gin-gonic/gin"
 )
@@ -17,15 +18,13 @@ func (a appApi) GetUserInfo(ctx *gin.Context) {
 	}
 	response.ReturnSuccess(ctx, 200, "获取用户信息成功", user)
 }
-func (a appApi) GetUserList(ctx *gin.Context) {
 
-}
-func (a appApi) CreateUser(ctx *gin.Context) {
-
-}
-func (a appApi) UpdateUser(ctx *gin.Context) {
-
-}
-func (a appApi) DeleteUser(ctx *gin.Context) {
-
+func (a appApi) RedisTest(ctx *gin.Context) {
+	global.Rdb.Set(ctx, "test", "test11111", 0).Err()
+	str, err := global.Rdb.Get(ctx, "test").Result()
+	if err != nil {
+		response.ReturnError(ctx, 1, "redis设置失败")
+		return
+	}
+	response.ReturnSuccess(ctx, 200, "redis测试成功", str)
 }

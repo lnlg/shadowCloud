@@ -1,7 +1,9 @@
 package bootstrap
 
 import (
+	"shadowCloud/app/task"
 	"shadowCloud/internal/config"
+	"shadowCloud/internal/crontab"
 	"shadowCloud/internal/global"
 	"shadowCloud/internal/logger"
 	"shadowCloud/internal/mysql"
@@ -23,4 +25,11 @@ func init() {
 	global.Rdb = redis.New()
 	// 初始化验证器
 	global.Validator = validator.InitValidator()
+
+	// 初始化crontab
+	global.Crontab = crontab.Init()
+	// 添加任务
+	global.Crontab.AddTask(task.Tasks()...)
+	// 启动crontab
+	global.Crontab.Start()
 }

@@ -9,6 +9,7 @@ import (
 // 跨域中间件
 func CorsMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
+		// 设置跨域头
 		c.Header("Access-Control-Allow-Origin", "*")
 		c.Header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
 		c.Header("Access-Control-Allow-Headers", "Origin, Content-Type, Accept, Authorization")

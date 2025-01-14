@@ -34,3 +34,8 @@ func ReturnError(c *gin.Context, code int, message string) {
 	}
 	c.JSON(http.StatusOK, json)
 }
+
+// 验证器失败返回
+func ReturnValidateFailed(c *gin.Context, msg string) {
+	ReturnError(c, 1, msg)
+}

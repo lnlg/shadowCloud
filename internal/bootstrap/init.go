@@ -6,6 +6,7 @@ import (
 	"shadowCloud/internal/logger"
 	"shadowCloud/internal/mysql"
 	"shadowCloud/internal/redis"
+	"shadowCloud/internal/validator"
 )
 
 func init() {
@@ -20,4 +21,6 @@ func init() {
 	global.Db = mysql.New()
 	// 初始化redis
 	global.Rdb = redis.New()
+	// 初始化验证器
+	global.Validator = validator.InitValidator()
 }

@@ -14,6 +14,7 @@ func RegisterAppRouter(r *gin.RouterGroup) {
 	{
 		test.GET("/user", app.AppApi.GetUserInfo)
 		test.GET("/redis", app.AppApi.RedisTest)
+		test.POST("/validator", app.AppApi.TestValidator)
 	}
 
 }

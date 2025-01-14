@@ -33,6 +33,31 @@ go install github.com/pilu/fresh@latest
 /Users/longlian/go/code/bin/fresh
 ```
 
+## 打包相关
+
+```go
+go mod tidy
+
+# 打包
+go build -o shadowCloud main.go
+
+GOOS：目标可执行程序运行操作系统，支持 darwin freebsd， linux ，windows
+GOARCH：目标可执行程序操作系统构架，包括  386， amd64 ，arm64
+CGO_ENABLED=0: 只对当前一次编译生效，不影响全局设置
+
+# 编译mac m1芯片的可执行文件
+CGO_ENABLED=0 GOOS=darwin GOARCH=arm64 go build -o shadowCloud main.go
+
+# 编译mac平台 x86的可执行文件
+CGO_ENABLED=0 GOOS=darwin GOARCH=amd64 go build -o shadowCloud main.go
+
+# 编译linux平台 x86的可执行文件
+CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o shadowCloud main.go
+
+# 编译windows平台 x86的可执行文件
+CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build -o shadowCloud main.go
+```
+
 ## 目录结构
 
 ```shell

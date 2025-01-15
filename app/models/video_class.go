@@ -29,6 +29,6 @@ func AddVideoClass(name string, sort int) (uint, error) {
 // 获取视频分类列表
 func GetVideoClassList() ([]VideoClass, error) {
 	var list []VideoClass
-	err := global.Db.Find(&list).Error
+	err := global.Db.Where("deleted = 0").Order("`sort` asc").Find(&list).Error
 	return list, err
 }

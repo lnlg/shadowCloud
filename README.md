@@ -64,18 +64,23 @@ CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build -o shadowCloud main.go
 $ tree -d -L 3
 .
 ├── app
-│   ├── api           //api接口层
-│   ├──├── app        //应用层
-│   └──└── admin      //后台管理层
-│   ├── service       //service层
-│   ├── middleware    //中间件层
+│   ├── api           //api接口
+│   ├──── app         //应用
+│   └──── admin       //后台管理
+│   ├── event         //事件
+│   ├── middleware    //中间件
 │   ├── route         //路由
+│   ├── service       //service
 │   ├── task          //定时任务
+│   ├── request       //请求
+│   ├── response      //响应
 │   ├── util          //工具层
 │   └── models        //数据库操作层
 ├── internal          //内部包
 │   ├── bootstrap     //启动引导
 │   ├── config        //配置
+│   ├── crontab       //定时任务
+│   ├── event         //事件
 │   ├── global        //全局变量
 │   ├── logger        //日志
 │   ├── mysql         //数据库连接

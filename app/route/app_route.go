@@ -14,6 +14,8 @@ func RegisterAppRouter(r *gin.RouterGroup) {
 	{
 		video.POST("/addVideoClass", app.VideoClassApi.AddVideoClass)
 		video.GET("/getVideoClassList", app.VideoClassApi.GetVideoClassList)
+		video.GET("/getSetting", app.VideoSettingApi.GetVideoSettingByKey)
+		video.POST("/addSetting", app.VideoSettingApi.AddVideoSetting)
 	}
 	test := r.Group("/test")
 	{

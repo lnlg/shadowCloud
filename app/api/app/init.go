@@ -1,6 +1,7 @@
 package app
 
 var (
-	AppApi        = new(appApi)
-	VideoClassApi = new(videoClass)
+	AppApi          = new(appApi)
+	VideoClassApi   = new(videoClass)
+	VideoSettingApi = new(videoSetting)
 )

@@ -1,6 +1,7 @@
 package app
 
 import (
+	"shadowCloud/app/event/event"
 	"shadowCloud/app/models"
 	"shadowCloud/app/request"
 	"shadowCloud/app/response"
@@ -45,4 +46,12 @@ func (a *appApi) TestValidator(ctx *gin.Context) {
 		return
 	}
 	response.ReturnSuccess(ctx, 200, "验证器测试成功", param)
+}
+
+// 测试事件
+func (a *appApi) TestEvent(ctx *gin.Context) {
+	// 触发事件
+	global.Event.Dispatch(&event.FooEvent{Id: 1, Username: "小明"})
+	global.Event.Dispatch(&event.FooEvent{Id: 2, Username: "小红"})
+	response.ReturnSuccess(ctx, 200, "事件测试成功", "test")
 }

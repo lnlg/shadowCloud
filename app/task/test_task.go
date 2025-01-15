@@ -24,7 +24,7 @@ type TestTask struct{}
 
 // 定义任务循环周期
 func (f *TestTask) Spec() string {
-	return "@every 3s"
+	return "@every 30s"
 }
 
 // 定义任务执行函数

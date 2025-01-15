@@ -1,9 +1,11 @@
 package bootstrap
 
 import (
+	appEVE "shadowCloud/app/event"
 	"shadowCloud/app/task"
 	"shadowCloud/internal/config"
 	"shadowCloud/internal/crontab"
+	"shadowCloud/internal/event"
 	"shadowCloud/internal/global"
 	"shadowCloud/internal/logger"
 	"shadowCloud/internal/mysql"
@@ -32,4 +34,9 @@ func init() {
 	global.Crontab.AddTask(task.Tasks()...)
 	// 启动crontab
 	global.Crontab.Start()
+
+	// 初始化事件调度器
+	global.Event = event.New()
+	// 注册事件
+	appEVE.RegisterAppEvent()
 }

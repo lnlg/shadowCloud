@@ -6,6 +6,7 @@ import (
 
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
+	"gorm.io/gorm/logger"
 	"gorm.io/gorm/schema"
 )
 
@@ -26,9 +27,8 @@ func New() (db *gorm.DB) {
 	}
 
 	if global.Config.App.Debug {
-		//开启mysql日志记录文本中
-		// db.Logger = logger.NewMysqlLogger()
-
+		//设置为 LogModeSQL 以输出 SQL 语句
+		db.Logger = logger.Default.LogMode(logger.Info)
 	}
 	// 设置连接池大小
 	sqlDB, err := db.DB()

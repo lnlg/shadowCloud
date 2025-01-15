@@ -6,17 +6,17 @@ import (
 	"shadowCloud/internal/event"
 )
 
-type FooListener struct{}
+type TestOneListener struct{}
 
 // 监听事件
-func (f FooListener) Listen() []event.EventInterface {
+func (t TestOneListener) Listen() []event.EventInterface {
 	return []event.EventInterface{
-		&appEvent.FooEvent{},
+		&appEvent.TestEvent{},
 	}
 }
 
 // 处理事件
-func (f FooListener) Process(e event.EventInterface) {
+func (t TestOneListener) Process(e event.EventInterface) {
 	fmt.Println("foo listener process event:", e, e.Name())
 	// println(e.(*appEvent.FooEvent).Id)
 	// println(e.(*appEvent.FooEvent).Username)

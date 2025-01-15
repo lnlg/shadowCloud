@@ -7,8 +7,8 @@ import (
 )
 
 var listenerList = []event.ListenerInterface{
-	listener.FooListener{},
-	listener.BarListener{},
+	listener.TestOneListener{},
+	listener.TestTwoListener{},
 }
 
 // 注册事件

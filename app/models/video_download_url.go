@@ -16,6 +16,16 @@ func (VideoDownloadUrl) TableName() string {
 	return "video_download_url"
 }
 
+// 检查下载地址是否存在
+func CheckDownloadUrl(url string, hashUrl string) bool {
+	data, _ := GetVideoDownloadUrl(hashUrl)
+	if data.ID > 0 {
+		return false
+	}
+	AddVideoDownloadUrl(url, hashUrl)
+	return true
+}
+
 // 添加视频下载链接
 func AddVideoDownloadUrl(url string, hashUrl string) (uint, error) {
 	data := VideoDownloadUrl{

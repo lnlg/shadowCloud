@@ -17,7 +17,7 @@ func (v *videoSetting) GetVideoSettingByKey(ctx *gin.Context) {
 		response.ReturnError(ctx, 1, "key不能为空")
 		return
 	}
-	data := models.GetVideoSettingByKey(key)
+	data := models.GetVideoSetting(key)
 	response.ReturnSuccess(ctx, 200, "获取成功", data)
 }
 

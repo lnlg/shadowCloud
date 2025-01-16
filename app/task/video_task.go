@@ -2,10 +2,12 @@ package task
 
 import (
 	"fmt"
+	"net/http"
+	"shadowCloud/internal/global"
 )
 
 // TestTask is a task that prints "foo task executed" every 3 seconds.
-type TestTask struct{}
+type VideoTask struct{}
 
 // https://godoc.org/github.com/robfig/cron
 // 每半个小时执行一次  "0 30 * * * *"
@@ -23,13 +25,19 @@ type TestTask struct{}
 // Day of week  | Yes        | 0-6 or SUN-SAT  | * / , - ?
 
 // 定义任务循环周期
-func (f *TestTask) Spec() string {
-	return "@every 30s"
+func (f *VideoTask) Spec() string {
+	return "@every 60s"
 }
 
 // 定义任务执行函数
-func (f *TestTask) Fn() func() {
+func (f *VideoTask) Fn() func() {
 	return func() {
-		fmt.Println("test_task 开始执行!")
+		url := "http://127.0.0.1:" + global.Config.App.Port + "/app/video/delDelayVideos"
+		resp, err := http.Get(url)
+		if err != nil {
+			fmt.Println("video_task 执行失败!", err)
+		}
+		defer resp.Body.Close()
+		fmt.Println("video_task 执行成功!", resp.StatusCode)
 	}
 }

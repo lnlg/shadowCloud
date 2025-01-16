@@ -20,7 +20,7 @@ func (VideoSetting) TableName() string {
 // 添加配置信息
 func AddVideoSetting(key string, value string, notes string) (uint, error) {
 	//判断key是否存在
-	if GetVideoSettingByKey(key) != "" {
+	if GetVideoSetting(key) != "" {
 		//key已存在，更新value
 		rows, err := UpdateVideoSetting(key, value)
 		if err != nil {
@@ -39,7 +39,7 @@ func AddVideoSetting(key string, value string, notes string) (uint, error) {
 }
 
 // 根据key获取配置value信息
-func GetVideoSettingByKey(key string) string {
+func GetVideoSetting(key string) string {
 	var data VideoSetting
 	err := global.Db.Where("`key` = ? AND `deleted` = 0", key).First(&data).Error
 	if err != nil {

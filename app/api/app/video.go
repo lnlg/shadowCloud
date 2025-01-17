@@ -67,3 +67,14 @@ func (v *videoApi) DeleteDownloadVideo(ctx *gin.Context) {
 	res := service.VideoService.DeleteDownloadVideo()
 	response.ReturnSuccess(ctx, 200, "处理成功!", res)
 }
+
+// 根据目录初始化信息到数据库
+func (v *videoApi) InitVideoDirPath(ctx *gin.Context) {
+	dir := ctx.DefaultQuery("dir", "")
+	if dir == "" {
+		response.ReturnError(ctx, 400, "dir不能为空")
+		return
+	}
+	res := service.VideoService.ScanDirToDB(dir)
+	response.ReturnSuccess(ctx, 200, "处理成功!", res)
+}

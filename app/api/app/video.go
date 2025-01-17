@@ -52,8 +52,8 @@ func (v *videoApi) MarkDownloadSuccess(c *gin.Context) {
 		response.ReturnError(c, 400, "id不能为空")
 		return
 	}
-	service.VideoService.MarkDownloadSuccess(id)
-	response.ReturnSuccess(c, 200, "标记成功", nil)
+	res := service.VideoService.MarkDownloadSuccess(id)
+	response.ReturnSuccess(c, 200, res, nil)
 }
 
 // 把缓存数据存入数据库

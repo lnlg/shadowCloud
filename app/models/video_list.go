@@ -59,6 +59,6 @@ func UpdateVideoDownloadState(id uint, downloadState int) (int64, error) {
 // 获取随机未下载的视频信息
 func GetRandomVideoInfo() (VideoList, error) {
 	var video VideoList
-	err := global.Db.Where("`download_state` = 0 AND `deleted` = 0").Order("RAND()").First(&video).Error
+	err := global.Db.Where("`download_state` = 0 AND `deleted` = 0").Order("id ASC").First(&video).Error
 	return video, err
 }

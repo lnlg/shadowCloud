@@ -11,6 +11,7 @@ import (
 	"shadowCloud/internal/global"
 	"shadowCloud/internal/tool"
 	"strconv"
+	"strings"
 
 	"github.com/redis/go-redis/v9"
 	"golang.org/x/exp/rand"
@@ -64,8 +65,8 @@ func (v *videoService) DownloadVideo(id int, downloadState int) interface{} {
 	//修改状态下载中-1
 	models.UpdateVideoDownloadState(video.Id, downloadState)
 	//延迟队列2小时未成功下载，恢复状态-0
-	//r_score := tool.GetDateTime() + 7200
-	//global.Rdb.ZAdd(context.Background(), "video:download_video:delay", redis.Z{Score: float64(r_score), Member: video.Id}).Err()
+	r_score := tool.GetDateTime() + 7200
+	global.Rdb.ZAdd(context.Background(), "video:download_video:delay", redis.Z{Score: float64(r_score), Member: video.Id}).Err()
 	return mapData
 }
 
@@ -120,7 +121,7 @@ func (v *videoService) MarkDownloadSuccess(id int) string {
 		cacheKey := "video:download_video:delay"
 		//延迟队列2小时未成功下载，删除
 		global.Rdb.ZRem(context.Background(), cacheKey, data.Id)
-		return "ok"
+		return "处理完毕"
 	} else {
 		// 修改状态下载失败,恢复状态-0
 		models.UpdateVideoDownloadState(data.Id, 0)
@@ -171,7 +172,7 @@ func (v *videoService) ClearRedisHtmlDetails() bool {
 // 添加视频信息
 func (v *videoService) MakeVideoInfo(typeid int, videoName string, orgDownloadUrl string, downloadState int) (int, error) {
 	//判断video_download_url表是否添加过
-	if models.CheckDownloadUrl(orgDownloadUrl, orgDownloadUrl) {
+	if !models.CheckDownloadUrl(orgDownloadUrl, tool.EncryMd5(videoName)) {
 		return 0, errors.New("视频已添加")
 	}
 	var param models.VideoList
@@ -184,6 +185,8 @@ func (v *videoService) MakeVideoInfo(typeid int, videoName string, orgDownloadUr
 	image_path := models.GetVideoSetting("image_path")
 	param.ImageUrl = image_path + strconv.Itoa(typeid) + "/" + videoName + ".png"
 	param.DownloadState = downloadState
+	param.Md5File = tool.EncryMd5(videoName)
+	param.OrgDownloadUrl = orgDownloadUrl
 	last_id, err := models.AddVideo(&param)
 	return int(last_id), err
 }
@@ -208,4 +211,30 @@ func (v *videoService) DeleteDownloadVideo() bool {
 		}
 	}
 	return true
+}
+func (v *videoService) ScanDirToDB(dir string) interface{} {
+	//扫描目录
+	files := tool.ScanDirectory(dir)
+	returnStr := ""
+	for _, file := range files {
+		//判断是否是文件
+		if !tool.FileExists(file) {
+			continue
+		}
+
+		file_new := strings.Replace(file, dir, "", -1)
+		typeIdStr := path.Dir(file_new)
+		type_id_str := strings.Trim(typeIdStr, "/")
+		video_name := path.Base(file_new)
+		if video_name == ".DS_Store" || video_name == "." {
+			continue
+		}
+		video_name = strings.Replace(video_name, path.Ext(file_new), "", -1)
+		org_download_url := "http://my.video.cn/public/video/" + typeIdStr + "/" + video_name + path.Ext(file_new)
+
+		type_id, _ := strconv.Atoi(type_id_str)
+		last_id, _ := v.MakeVideoInfo(type_id, video_name, org_download_url, 2)
+		returnStr += video_name + ":" + strconv.Itoa(last_id) + ","
+	}
+	return returnStr
 }

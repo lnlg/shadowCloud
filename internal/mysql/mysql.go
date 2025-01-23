@@ -2,6 +2,7 @@ package mysql
 
 import (
 	"shadowCloud/internal/global"
+	gorm_logger "shadowCloud/internal/logger"
 	"time"
 
 	"gorm.io/driver/mysql"
@@ -28,7 +29,8 @@ func New() (db *gorm.DB) {
 
 	if global.Config.App.Debug {
 		//设置为 LogModeSQL 以输出 SQL 语句
-		db.Logger = logger.Default.LogMode(logger.Info)
+		// db.Logger = logger.Default.LogMode(logger.Info)
+		db.Logger = &gorm_logger.GormLogger{Logger: logger.Info}
 	}
 	// 设置连接池大小
 	sqlDB, err := db.DB()

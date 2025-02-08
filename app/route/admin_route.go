@@ -13,13 +13,13 @@ func RegisterAdminRouter(r *gin.RouterGroup) {
 	})
 	r.POST("/login", admin.AdminLogin.Login)
 	// ------ 以上的接口不走权限校验 ------
-	// 权限验证中间件
-	r.Use(middleware.PermissionMiddleware())
+	r.Use(middleware.PermissionMiddleware()) // 权限验证中间件
 
 	r.GET("/token", admin.AdminLogin.GetUserInfoByToken)
 	user := r.Group("/user")
 	{
-		user.GET("/profile", admin.AdminApi.Profile)
+		user.POST("/create_user", admin.AdminUsers.CreateUsers) //创建用户信息
+		//user.GET("/profile", admin.AdminApi.Profile)
 	}
 
 }

@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"errors"
 	"shadowCloud/app/models"
 	"shadowCloud/internal/global"
 	"shadowCloud/internal/tool"
@@ -25,7 +26,7 @@ func (a *adminUsersService) Login(username string, password string, login_ip str
 	token := tool.GetRandomStr(16)
 	// 保存token对应用户信息到redis
 	cache_key := "login_token:" + token
-	global.Rdb.HSet(context.Background(), cache_key, "id", userinfo.ID, "username", userinfo.Username, "nickname", userinfo.Nickname, "avatar", userinfo.Avatar, "email", userinfo.Email, "mobile", userinfo.Mobile)
+	global.Rdb.HSet(context.Background(), cache_key, "id", int(userinfo.Id), "username", userinfo.Username, "nickname", userinfo.Nickname, "avatar", userinfo.Avatar, "email", userinfo.Email, "mobile", userinfo.Mobile)
 	// 设置token有效期2个小时
 	global.Rdb.Expire(context.Background(), cache_key, time.Minute*60*2)
 	//更新用户最后登录时间和ip
@@ -47,4 +48,36 @@ func (a *adminUsersService) GetUserInfoByToken(token string) (bool, map[string]s
 		return false, nil
 	}
 	return true, result
+}
+
+// 创建用户
+func (a *adminUsersService) CreateAdminUser(username string, password string, nickname string, email string, mobile string, avatar string) (int, error) {
+	//判断用户名是否存在
+	userinfo, _ := models.GetAdminUserByUsername(username)
+	if userinfo.Username != "" {
+		return 0, errors.New("用户名已存在！")
+	}
+	//判断手机号是否存在
+	userinfo, _ = models.GetAdminUserByMobile(mobile)
+	if userinfo.Mobile != "" {
+		return 0, errors.New("手机号已存在！")
+	}
+	//判断邮箱是否存在
+	userinfo, _ = models.GetAdminUserByEmail(email)
+	if userinfo.Email != "" {
+		return 0, errors.New("邮箱已存在！")
+	}
+	user := models.AdminUser{
+		Username:      username,
+		Password:      tool.EncryMd5(password),
+		Nickname:      nickname,
+		Email:         email,
+		Mobile:        mobile,
+		Avatar:        avatar,
+		LastLoginIp:   "",
+		LastLoginTime: models.LocalTime(time.Now()),
+		CreatedAt:     models.LocalTime(time.Now()),
+	}
+	id, err := models.CreateAdminUser(&user)
+	return int(id), err
 }

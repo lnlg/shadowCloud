@@ -1,6 +1,9 @@
 package models
 
-import "shadowCloud/internal/global"
+import (
+	"shadowCloud/internal/global"
+	"shadowCloud/internal/tool"
+)
 
 type AdminUser struct {
 	ID            int       `json:"id"`
@@ -27,4 +30,9 @@ func GetAdminUserByUsername(username string) (AdminUser, error) {
 	var user AdminUser
 	err := global.Db.Where("username = ? and is_deleted = 0", username).First(&user).Error
 	return user, err
+}
+
+// 更新最后登录时间和ip
+func UpdateAdminUserLastLoginInfo(username string, ip string) error {
+	return global.Db.Model(&AdminUser{}).Where("username = ?", username).Update("last_login_ip", ip).Update("last_login_time", tool.GetNowDate()).Error
 }

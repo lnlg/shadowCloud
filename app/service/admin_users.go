@@ -14,7 +14,7 @@ type adminUsersService struct {
 }
 
 // 登录操作
-func (a *adminUsersService) Login(username string, password string) (bool, string) {
+func (a *adminUsersService) Login(username string, password string, login_ip string) (bool, string) {
 	userinfo, _ := models.GetAdminUserByUsername(username)
 	if userinfo.Username == "" {
 		return false, "用户不存在！"
@@ -28,6 +28,8 @@ func (a *adminUsersService) Login(username string, password string) (bool, strin
 	global.Rdb.HSet(context.Background(), cache_key, "id", userinfo.ID, "username", userinfo.Username, "nickname", userinfo.Nickname, "avatar", userinfo.Avatar, "email", userinfo.Email, "mobile", userinfo.Mobile)
 	// 设置token有效期2个小时
 	global.Rdb.Expire(context.Background(), cache_key, time.Minute*60*2)
+	//更新用户最后登录时间和ip
+	models.UpdateAdminUserLastLoginInfo(userinfo.Username, login_ip)
 	return true, token
 }
 func (a *adminUsersService) GetUserInfoByToken(token string) (bool, map[string]string) {

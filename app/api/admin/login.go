@@ -17,7 +17,7 @@ func (l *loginAdmin) Login(ctx *gin.Context) {
 		response.ReturnValidateFailed(ctx, request.GetErrorMsg(form, err))
 		return
 	}
-	isTrue, token := service.AdminUsersService.Login(form.Username, form.Password)
+	isTrue, token := service.AdminUsersService.Login(form.Username, form.Password, ctx.ClientIP())
 	if isTrue {
 		response.ReturnSuccess(ctx, 200, "登录成功！", token)
 	} else {

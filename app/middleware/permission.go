@@ -25,11 +25,12 @@ func PermissionMiddleware() gin.HandlerFunc {
 			ctx.Abort() //终止后接口调用，不加的话recover到异常后，还会继续执行接口后面的代码
 			return
 		}
+		// 获取路由
+		//path := c.FullPath()
+
 		// 验证通过，继续执行接口
 		ctx.Next()
 	}
-	// 获取路由
-	//path := c.FullPath()
 
 }
 

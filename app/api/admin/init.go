@@ -1,5 +1,6 @@
 package admin
 
 var (
-	AdminApi = new(adminApi)
+	AdminApi   = new(adminApi)
+	AdminLogin = new(loginAdmin)
 )

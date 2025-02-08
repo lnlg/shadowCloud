@@ -6,6 +6,8 @@ go项目使用gin封装一个简洁的项目框架
 
 ```go
 go run main.go start
+
+air start
 ```
 
 ## 安装插件
